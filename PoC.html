@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&amp;subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        header {
+            margin: 0 auto;
+            position: relative;
+            /* width: 100%;
+            height: 50px; */
+            display: flex;
+            /* margin-left:5%; */
+            background-color: rgb(255, 255, 255);
+            box-shadow: rgb(231, 231, 231) 2px 2px 5px;
+            margin-bottom: -14px;
+        }
+
+        body {
+            background-color: #f1f2f2;
+        }
+
+        nav {
+            margin: 0 auto;
+            position: relative;
+            background-color: rgb(255, 255, 255);
+            box-shadow: rgb(231, 231, 231) 2px 2px 5px;
+            /* margin-bottom: 16px; */
+            /* display: inline-flex; */
+        }
+
+        #cell {
+            background-color: #e8e8e8;
+            width: 450px;
+            height: 450px;
+        }
+
+        #big_table {
+            margin-top: -20px;
+            margin-left: 0px;
+            border-spacing: 15px;
+        }
+
+        .dot {
+            overflow: hidden;
+            float: left;
+            width: 12px;
+            height: 12px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');
+        }
+
+        .dotOverlay {
+            position: relative;
+            bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            border-bottom: 2px solid #ddd;
+            float: left;
+            font-size: 12px;
+            padding: 5px;
+            background: #fff;
+        }
+
+        .dotOverlay:nth-of-type(n) {
+            border: 0;
+            box-shadow: 0px 1px 2px #888;
+        }
+
+        .number {
+            font-weight: bold;
+            color: #ee6152;
+        }
+
+        .dotOverlay:after {
+            content: '';
+            position: absolute;
+            margin-left: -6px;
+            left: 50%;
+            bottom: -8px;
+            width: 11px;
+            height: 8px;
+            background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')
+        }
+
+        .distanceInfo {
+            position: relative;
+            top: 5px;
+            left: 5px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .distanceInfo .label {
+            display: inline-block;
+            width: 50px;
+        }
+
+        .distanceInfo:after {
+            content: none;
+        }
+
+        .area {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #888;
+            border-radius: 3px;
+            font-size: 12px;
+            top: -5px;
+            left: 15px;
+            padding: 2px;
+        }
+
+        .info {
+            font-size: 12px;
+            padding: 5px;
+        }
+
+        .info .title {
+            font-weight: bold;
+        }
+
+
+        #topMenu {
+            height: 30px;
+            width: relative;
+        }
+
+        #topMenu ul li {
+            list-style: none;
+            color: white;
+            background-color: white;
+            float: left;
+            line-height: 30px;
+            vertical-align: middle;
+            text-align: center;
+            margin-right: 70px;
+        }
+
+        #topMenu .menuLink {
+            text-decoration: none;
+            color: #2d2d2d;
+            display: block;
+            width: 200px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #topMenu .menuLink:hover {
+            color: white;
+            background-color: #4d4d4d;
+        }
+
+        /* #header #gnb {overflow:hidden;height:90px}
+#header #gnb li{float:left;margin-right:41px} */
+    </style>
+    <title>지도</title>
+
+</head>
+
+<body>
+    <header>
+        <h1 style="overflow: hidden;float: left; margin-left:40px; color:rgb(15,17,96);"> 우리동네 픽업스토어</h1>
+        <!-- <iframe src="http://localhost:8000/untitled-1.html" style="width:90%; height:500px"></iframe> -->
+    </header>
+    <nav id="topMenu">
+        <ul>
+            <li><a class="menuLink" href="#">우리동네 픽업스토어란?</a></li>
+            <li><a class="menuLink" href="PoC.html">지역별 픽업스토어</a></li>
+            <li><a class="menuLink" href="#">[소상공인] 픽업스토어 신청하기</a></li>
+            <li><a class="menuLink" href="PoC_2ndPage.html">[소비자] 픽업 신청하기</a></li>
+        </ul>
+    </nav>
+
+    <fieldset style="line-height: 1px; border:none; margin-top: 10px;">
+        <h2>
+            <span style="font-size:large; font-weight:bold;">지역별 픽업스토어 </span>
+        </h2><br>
+        <h3 style="font-size:medium; font-weight: 600;"> 지역 선택 : </h3>
+        <select id="city" onchange="itemChange(this)">
+            <option value="base" selected disabled>서울/대구</option>
+            <option value="seoul">서울특별시</option>
+            <option value="daegu">대구광역시</option>
+        </select>
+
+        <select id="gu">
+            <option selected>지역을 먼저 선택해주세요</option>
+        </select><br>
+
+        <script language="JavaScript">
+
+            function itemChange(e) {
+                var seoul = ["===선택===", "서울특별시 중구 신당동", "서울특별시 중구 황학동", "서울특별시 노원구 상계2동", "서울특별시 노원구 중계2.3동"];
+                var daegu = ["===선택===", "대구광역시 수성구 수성1가동", "대구광역시 수성구 두산동"];
+                var target = document.getElementById("gu");
+
+                if (e.value == "seoul") var d = seoul;
+                else if (e.value == "daegu") {
+                    var d = daegu;
+                    var op = ["base"]
+                }
+
+                target.options.length = 0;
+
+                for (x in d) {
+                    var opt = document.createElement("option");
+                    if (e.value == "seoul") opt.value = d[x];
+                    else if (e.value == "daegu") opt.value = op[x];
+                    opt.innerHTML = d[x];
+                    target.appendChild(opt);
+                }
+
+            }
+        </script>
+        <h4 style="font-size:small; font-weight: 100;"> 현재 서비스를 이용하실 수 있는 곳은 서울특별시 중구 신당동,
+            서울특별시 중구 황학동, 서울특별시 노원구 상계2동, 서울특별시 노원구 중계2.3동,
+            대구광역시 수성구 수성1가동, 대구광역시 수성구 두산동입니다.</h4>
+
+    </fieldset>
+
+    <hr>
+
+    <fieldset style="border:none;">
+        <legend style="font-size:large; font-weight: 600;">신당동 우리동네 픽업스토어 정보</legend>
+        <br>
+        <table id="big_table">
+            <tr>
+                <td id="cell">
+                    <label style="font-size:medium; font-weight: bold; margin-left:10px;">픽업스토어 위치</label>
+                    <div>
+                        <h4 style="font-size:small; font-weight: 400; margin-left:10px;word-break:break-all;">특정 위치에서
+                            우리동네 픽업스토어까지의 거리를 알고 싶으시다면, 원하시는 지점들을
+                            클릭해주세요. 원하시는 직선 거리를 설정하신 후 오른쪽 마우스를 클릭하시면 거리 정보를 알아내실 수 있습니다.
+                        </h4>
+                        <!-- 지도를 표시할 div 입니다 -->
+                        <div id="map" style="width:400px;height:400px; margin: 0px auto; bottom:10px;"></div>
+
+                    </div>
+                </td>
+                <td id="cell">
+                    <label style="font-size:medium; font-weight: bold; margin-left:10px;">우리동네 픽업스토어 로드뷰</label>
+                    <div>
+                        <h4 style="font-size:small; font-weight: 400; margin-left:10px; word-break:break-all;">원하시는 위치의
+                            픽업스토어를 선택해주세요 :
+                            <select id="sindang_position" style="font-size: small;">
+                                <option value="1" selected>신당동 서울지방경찰청</option>
+                                <option value="2">신당동떡볶이공원</option>
+                            </select><br>
+                            현재 예시) 신당동 서울지방경찰청</h4>
+                        <!-- 로드뷰를 표시할 div 입니다 -->
+                        <div id="roadview" style="width:400px;height:400px; margin: 0px auto; bottom:5px;"></div>
+                    </div>
+                </td>
+                <td id="cell"><label style="font-size:medium; font-weight: bold; margin-left:10px;">신당동 우리동네 픽업스토어 판매
+                        top5</label>
+                    <div>
+                        <h4 style="font-size:small; font-weight: 400; margin-left:10px; word-break:break-all;">2020년 5월
+                            신당동 기준으로
+                            가장 많이 팔리고 있는 물품<br>
+                            ★ '신당동 친구네마트' 주문하기 버튼 눌러보기 ▷ 두번째 페이지로 이동 가능
+                        </h4>
+                        <table
+                            style="border-collapse: collapse; width: 420px; height:400px; text-align: center; margin: 0 auto;bottom:10px; font-size:small;"
+                            border="1">
+                            <tr style="height:40px; background-color: rgb(15,17,96); color: white;">
+                                <th>가게 상호명</th>
+                                <th>도로명 주소</th>
+                                <th>주문하기</th>
+                            </tr>
+                            <tr>
+                                <th>신당동 친구네마트</th>
+                                <td>서울특별시 중구 장충단로8길 59</td>
+                                <td><button type="button" onclick="location.href='PoC_2ndPage.html'">주문</button></td>
+                            </tr>
+                            <tr>
+                                <th>신당동 오피스알파</th>
+                                <td>서울특별시 중구 퇴계로 395</td>
+                                <td><button>주문</button></td>
+
+                            </tr>
+                            <tr>
+                                <th>신당동 제일평화시장</th>
+                                <td>서울특별시 중구 마장로 11</td>
+                                <td><button>주문</button></td>
+                            </tr>
+                            <tr>
+                                <th>신당동 김포상회</th>
+                                <td>중구 퇴계로 411-34</td>
+                                <td><button>주문</button></td>
+                            </tr>
+                            <tr>
+                                <th>신당동 모닝글로리</th>
+                                <td>서울특별시 중구 다산로 24 5</td>
+                                <td><button>주문</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+
+
+
+
+    <!-- <p>
+    <em>지도를 마우스로 클릭하면 선 그리기가 시작되고<br>오른쪽 마우스를 클릭하면 선 그리기가 종료됩니다</em>
+</p> -->
+    <p id="result"></p>
+
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	eb4f1e5901021a5255d70380a5388796"></script>
+    <script>
+
+        var areas = [
+            {
+                name: '신당동',
+                path: [
+                    new kakao.maps.LatLng(37.5655689999998, 127.018091),
+                    new kakao.maps.LatLng(37.56553399999979, 127.017766),
+                    new kakao.maps.LatLng(37.5654059999998, 127.01663400000001),
+                    new kakao.maps.LatLng(37.5653609999998, 127.01623799999999),
+                    new kakao.maps.LatLng(37.56535999999979, 127.016228),
+                    new kakao.maps.LatLng(37.5648819999998, 127.016145),
+                    new kakao.maps.LatLng(37.56441699999979, 127.01606399999999),
+                    new kakao.maps.LatLng(37.56428499999979, 127.016035),
+                    new kakao.maps.LatLng(37.564086999999795, 127.015971),
+                    new kakao.maps.LatLng(37.564080999999796, 127.015969),
+                    new kakao.maps.LatLng(37.564030999999794, 127.015951),
+                    new kakao.maps.LatLng(37.5638199999999, 127.015855),
+                    new kakao.maps.LatLng(37.563638999999796, 127.015758),
+                    new kakao.maps.LatLng(37.56340999999979, 127.015631),
+                    new kakao.maps.LatLng(37.56318699999979, 127.015501),
+                    new kakao.maps.LatLng(37.5630949999998, 127.01544799999999),
+                    new kakao.maps.LatLng(37.5601739999998, 127.013756),
+                    new kakao.maps.LatLng(37.560996999999794, 127.01155700000001),
+                    new kakao.maps.LatLng(37.561274999999796, 127.010799),
+                    new kakao.maps.LatLng(37.56142799999979, 127.01066999999999),
+                    new kakao.maps.LatLng(37.5615699999998, 127.01056799999999),
+                    new kakao.maps.LatLng(37.5620169999998, 127.01038500000001),
+                    new kakao.maps.LatLng(37.56196599999979, 127.00998200000001),
+                    new kakao.maps.LatLng(37.56196599999979, 127.009794),
+                    new kakao.maps.LatLng(37.5620789999998, 127.00936599999999),
+                    new kakao.maps.LatLng(37.56222799999979, 127.009396),
+                    new kakao.maps.LatLng(37.562529999999796, 127.00950800000001),
+                    new kakao.maps.LatLng(37.5628389999998, 127.00954499999999),
+                    new kakao.maps.LatLng(37.56290899999979, 127.00958600000001),
+                    new kakao.maps.LatLng(37.5629349999998, 127.009603),
+                    new kakao.maps.LatLng(37.56300399999979, 127.00971299999999),
+                    new kakao.maps.LatLng(37.5630329999998, 127.00976499999999),
+                    new kakao.maps.LatLng(37.56306899999979, 127.00983000000001),
+                    new kakao.maps.LatLng(37.56307999999979, 127.009848),
+                    new kakao.maps.LatLng(37.56310299999979, 127.00988799999999),
+                    new kakao.maps.LatLng(37.563092999999796, 127.009923),
+                    new kakao.maps.LatLng(37.56307999999979, 127.009969),
+                    new kakao.maps.LatLng(37.5630769999999, 127.00998),
+                    new kakao.maps.LatLng(37.563140999999796, 127.01000900000001),
+                    new kakao.maps.LatLng(37.5631539999998, 127.01001399999998),
+                    new kakao.maps.LatLng(37.56315599999979, 127.010016),
+                    new kakao.maps.LatLng(37.563163999999794, 127.00998200000001),
+                    new kakao.maps.LatLng(37.563165999999796, 127.009971),
+                    new kakao.maps.LatLng(37.5631739999998, 127.00993400000002),
+                    new kakao.maps.LatLng(37.563194999999794, 127.00993700000001),
+                    new kakao.maps.LatLng(37.56320699999979, 127.00993899999999),
+                    new kakao.maps.LatLng(37.563222999999795, 127.009941),
+                    new kakao.maps.LatLng(37.563250999999795, 127.009945),
+                    new kakao.maps.LatLng(37.563278999999795, 127.009948),
+                    new kakao.maps.LatLng(37.56328599999979, 127.009949),
+                    new kakao.maps.LatLng(37.5633119999998, 127.00995400000001),
+                    new kakao.maps.LatLng(37.563337999999796, 127.009956),
+                    new kakao.maps.LatLng(37.56337599999979, 127.009956),
+                    new kakao.maps.LatLng(37.56346899999979, 127.009957),
+                    new kakao.maps.LatLng(37.5635569999998, 127.009957),
+                    new kakao.maps.LatLng(37.5636159999998, 127.00995900000001),
+                    new kakao.maps.LatLng(37.563664999999794, 127.00995900000001),
+                    new kakao.maps.LatLng(37.56374999999979, 127.00996),
+                    new kakao.maps.LatLng(37.5638209999998, 127.00995900000001),
+                    new kakao.maps.LatLng(37.5638719999998, 127.00995900000001),
+                    new kakao.maps.LatLng(37.563973999999796, 127.00996799999999),
+                    new kakao.maps.LatLng(37.564077999999796, 127.009977),
+                    new kakao.maps.LatLng(37.564136999999796, 127.009983),
+                    new kakao.maps.LatLng(37.564165999999794, 127.00998600000001),
+                    new kakao.maps.LatLng(37.5642009999998, 127.009992),
+                    new kakao.maps.LatLng(37.564257999999796, 127.010005),
+                    new kakao.maps.LatLng(37.564342999999795, 127.010024),
+                    new kakao.maps.LatLng(37.5643759999998, 127.01003200000001),
+                    new kakao.maps.LatLng(37.56444499999979, 127.010047),
+                    new kakao.maps.LatLng(37.564455999999794, 127.01005),
+                    new kakao.maps.LatLng(37.5644799999998, 127.010056),
+                    new kakao.maps.LatLng(37.5644969999998, 127.01006100000001),
+                    new kakao.maps.LatLng(37.564483999999794, 127.010145),
+                    new kakao.maps.LatLng(37.564530999999796, 127.01016499999999),
+                    new kakao.maps.LatLng(37.564607999999794, 127.01021399999999),
+                    new kakao.maps.LatLng(37.56460599999979, 127.010222),
+                    new kakao.maps.LatLng(37.564722999999795, 127.01029799999999),
+                    new kakao.maps.LatLng(37.564733999999795, 127.01030700000001),
+                    new kakao.maps.LatLng(37.56482799999979, 127.01038799999999),
+                    new kakao.maps.LatLng(37.56494099999979, 127.01048),
+                    new kakao.maps.LatLng(37.56499399999979, 127.01045800000001),
+                    new kakao.maps.LatLng(37.56504199999979, 127.01043899999999),
+                    new kakao.maps.LatLng(37.56503099999979, 127.010508),
+                    new kakao.maps.LatLng(37.56502199999979, 127.01056799999999),
+                    new kakao.maps.LatLng(37.565158999999795, 127.01064099999999),
+                    new kakao.maps.LatLng(37.56522199999979, 127.010675),
+                    new kakao.maps.LatLng(37.56522799999979, 127.010663),
+                    new kakao.maps.LatLng(37.565231999999796, 127.010636),
+                    new kakao.maps.LatLng(37.56537999999979, 127.010723),
+                    new kakao.maps.LatLng(37.565425999999796, 127.010749),
+                    new kakao.maps.LatLng(37.5654309999998, 127.010752),
+                    new kakao.maps.LatLng(37.565563999999796, 127.010899),
+                    new kakao.maps.LatLng(37.5655749999998, 127.01091299999999),
+                    new kakao.maps.LatLng(37.56584999999979, 127.01132700000001),
+                    new kakao.maps.LatLng(37.56615099999979, 127.011602),
+                    new kakao.maps.LatLng(37.5661939999998, 127.01163999999999),
+                    new kakao.maps.LatLng(37.56646599999979, 127.011426),
+                    new kakao.maps.LatLng(37.5666259999999, 127.011298),
+                    new kakao.maps.LatLng(37.566650999999794, 127.011278),
+                    new kakao.maps.LatLng(37.566669999999796, 127.01126399999998),
+                    new kakao.maps.LatLng(37.566855999999795, 127.011196),
+                    new kakao.maps.LatLng(37.56687099999979, 127.01119399999999),
+                    new kakao.maps.LatLng(37.567409999999796, 127.01110600000001),
+                    new kakao.maps.LatLng(37.5675529999998, 127.01108300000001),
+                    new kakao.maps.LatLng(37.567562999999794, 127.01107900000001),
+                    new kakao.maps.LatLng(37.5677559999998, 127.01101000000001),
+                    new kakao.maps.LatLng(37.56778599999979, 127.010999),
+                    new kakao.maps.LatLng(37.56786199999979, 127.010947),
+                    new kakao.maps.LatLng(37.568032999999794, 127.010829),
+                    new kakao.maps.LatLng(37.56821899999979, 127.010594),
+                    new kakao.maps.LatLng(37.5682229999998, 127.010589),
+                    new kakao.maps.LatLng(37.56825599999979, 127.010356),
+                    new kakao.maps.LatLng(37.568327999999795, 127.01033500000001),
+                    new kakao.maps.LatLng(37.5683469999999, 127.010328),
+                    new kakao.maps.LatLng(37.5683719999998, 127.010318),
+                    new kakao.maps.LatLng(37.568426999999794, 127.010296),
+                    new kakao.maps.LatLng(37.568468999999794, 127.01028000000001),
+                    new kakao.maps.LatLng(37.56877399999979, 127.01019299999999),
+                    new kakao.maps.LatLng(37.5688419999998, 127.01017399999999),
+                    new kakao.maps.LatLng(37.56884399999979, 127.010173),
+                    new kakao.maps.LatLng(37.568848999999794, 127.010171),
+                    new kakao.maps.LatLng(37.56889999999979, 127.010152),
+                    new kakao.maps.LatLng(37.5689689999998, 127.010126),
+                    new kakao.maps.LatLng(37.569104999999794, 127.010075),
+                    new kakao.maps.LatLng(37.56915899999979, 127.010053),
+                    new kakao.maps.LatLng(37.569213999999796, 127.010038),
+                    new kakao.maps.LatLng(37.5693079999999, 127.010011),
+                    new kakao.maps.LatLng(37.569320999999796, 127.010006),
+                    new kakao.maps.LatLng(37.56942899999979, 127.009971),
+                    new kakao.maps.LatLng(37.56962399999979, 127.009882),
+                    new kakao.maps.LatLng(37.56964299999979, 127.009876),
+                    new kakao.maps.LatLng(37.56972799999979, 127.009847),
+                    new kakao.maps.LatLng(37.569765999999795, 127.00983400000001),
+                    new kakao.maps.LatLng(37.5697759999998, 127.010034),
+                    new kakao.maps.LatLng(37.569771999999794, 127.01115700000001),
+                    new kakao.maps.LatLng(37.56976699999979, 127.012107),
+                    new kakao.maps.LatLng(37.5697399999998, 127.01243000000001),
+                    new kakao.maps.LatLng(37.56973899999979, 127.012478),
+                    new kakao.maps.LatLng(37.5696999999998, 127.01306399999999),
+                    new kakao.maps.LatLng(37.5697089999998, 127.01381200000002),
+                    new kakao.maps.LatLng(37.5697079999999, 127.01395500000001),
+                    new kakao.maps.LatLng(37.569709999999795, 127.01408400000001),
+                    new kakao.maps.LatLng(37.56971399999979, 127.014324),
+                    new kakao.maps.LatLng(37.5697199999998, 127.01465300000001),
+                    new kakao.maps.LatLng(37.56973299999979, 127.01508500000001),
+                    new kakao.maps.LatLng(37.56973599999979, 127.015257),
+                    new kakao.maps.LatLng(37.5697399999998, 127.01538300000001),
+                    new kakao.maps.LatLng(37.569754999999795, 127.01556599999999),
+                    new kakao.maps.LatLng(37.569771999999794, 127.01578700000002),
+                    new kakao.maps.LatLng(37.5697959999998, 127.016081),
+                    new kakao.maps.LatLng(37.56979799999979, 127.016104),
+                    new kakao.maps.LatLng(37.56984299999979, 127.016383),
+                    new kakao.maps.LatLng(37.569878999999794, 127.0166),
+                    new kakao.maps.LatLng(37.5699199999999, 127.016842),
+                    new kakao.maps.LatLng(37.5699649999998, 127.01711),
+                    new kakao.maps.LatLng(37.5700409999998, 127.01726200000002),
+                    new kakao.maps.LatLng(37.57007699999979, 127.01733300000001),
+                    new kakao.maps.LatLng(37.57008499999979, 127.017362),
+                    new kakao.maps.LatLng(37.570123999999794, 127.01751399999999),
+                    new kakao.maps.LatLng(37.570167999999796, 127.01768899999999),
+                    new kakao.maps.LatLng(37.5701169999998, 127.01769399999999),
+                    new kakao.maps.LatLng(37.57009599999979, 127.017697),
+                    new kakao.maps.LatLng(37.5700879999999, 127.017698),
+                    new kakao.maps.LatLng(37.5700609999998, 127.017701),
+                    new kakao.maps.LatLng(37.569965999999795, 127.01771299999999),
+                    new kakao.maps.LatLng(37.569925999999796, 127.017716),
+                    new kakao.maps.LatLng(37.56987999999979, 127.017721),
+                    new kakao.maps.LatLng(37.569731999999796, 127.017738),
+                    new kakao.maps.LatLng(37.56958999999979, 127.017752),
+                    new kakao.maps.LatLng(37.56948299999979, 127.01776000000001),
+                    new kakao.maps.LatLng(37.569334999999796, 127.017772),
+                    new kakao.maps.LatLng(37.5692329999998, 127.01778),
+                    new kakao.maps.LatLng(37.56908299999979, 127.01779199999999),
+                    new kakao.maps.LatLng(37.56890299999979, 127.017807),
+                    new kakao.maps.LatLng(37.5687519999998, 127.01781799999999),
+                    new kakao.maps.LatLng(37.568667999999796, 127.017824),
+                    new kakao.maps.LatLng(37.568389999999795, 127.017843),
+                    new kakao.maps.LatLng(37.568313999999795, 127.017849),
+                    new kakao.maps.LatLng(37.568307999999796, 127.017849),
+                    new kakao.maps.LatLng(37.56813199999979, 127.017866),
+                    new kakao.maps.LatLng(37.568026999999795, 127.017875),
+                    new kakao.maps.LatLng(37.5679359999998, 127.01788300000001),
+                    new kakao.maps.LatLng(37.5678509999998, 127.01789),
+                    new kakao.maps.LatLng(37.5677669999998, 127.01789699999999),
+                    new kakao.maps.LatLng(37.567669999999794, 127.017904),
+                    new kakao.maps.LatLng(37.5674599999998, 127.017921),
+                    new kakao.maps.LatLng(37.5673279999998, 127.017932),
+                    new kakao.maps.LatLng(37.567168999999794, 127.017946),
+                    new kakao.maps.LatLng(37.56702299999979, 127.01796000000002),
+                    new kakao.maps.LatLng(37.5669029999998, 127.017968),
+                    new kakao.maps.LatLng(37.5667679999998, 127.017977),
+                    new kakao.maps.LatLng(37.5667369999998, 127.017978),
+                    new kakao.maps.LatLng(37.566683999999796, 127.017981),
+                    new kakao.maps.LatLng(37.5665349999999, 127.017983),
+                    new kakao.maps.LatLng(37.5664299999998, 127.017982),
+                    new kakao.maps.LatLng(37.566326999999795, 127.01799299999999),
+                    new kakao.maps.LatLng(37.566157999999795, 127.018009),
+                    new kakao.maps.LatLng(37.5659729999999, 127.01803600000001),
+                    new kakao.maps.LatLng(37.56581599999979, 127.01805800000001),
+                    new kakao.maps.LatLng(37.565698999999796, 127.018074),
+                    new kakao.maps.LatLng(37.5655689999998, 127.018091)
+
+                ]
+            }
+        ]
+
+
+        var mapWrapper = document.getElementById('mapWrapper'); //지도를 감싸고 있는 DIV태그
+
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new kakao.maps.LatLng(37.565, 127.015), // 지도의 중심좌표
+                level: 5 // 지도의 확대 레벨  
+            };
+        var map = new kakao.maps.Map(mapContainer, mapOption),
+            customOverlay = new kakao.maps.CustomOverlay({}),
+            infowindow = new kakao.maps.InfoWindow({ removable: true });
+
+        // 지도에 영역데이터를 폴리곤으로 표시합니다 
+        for (var i = 0, len = areas.length; i < len; i++) {
+            displayArea(areas[i]);
+        }
+
+        // 다각형을 생상하고 이벤트를 등록하는 함수입니다
+        function displayArea(area) {
+
+            // 다각형을 생성합니다 
+            var polygon = new kakao.maps.Polygon({
+                map: map, // 다각형을 표시할 지도 객체
+                path: area.path,
+                strokeWeight: 2,
+                strokeColor: '#004c80',
+                strokeOpacity: 0.8,
+                fillColor: '#fff',
+                fillOpacity: 0.1
+            });
+
+            // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다 
+            // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+            kakao.maps.event.addListener(polygon, 'mouseover', function (mouseEvent) {
+                polygon.setOptions({ fillColor: '#09f' });
+                if (area.name == "신당동") {
+                    area.pmedian_num = "2";
+                }
+                customOverlay.setContent('<div class="area">' + area.name + "의 픽업스토어 개수 : " + area.pmedian_num + '</div>');
+
+                customOverlay.setPosition(mouseEvent.latLng);
+                customOverlay.setMap(map);
+            });
+
+            // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다 
+            kakao.maps.event.addListener(polygon, 'mousemove', function (mouseEvent) {
+
+                customOverlay.setPosition(mouseEvent.latLng);
+            });
+
+            // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+            // 커스텀 오버레이를 지도에서 제거합니다 
+            kakao.maps.event.addListener(polygon, 'mouseout', function () {
+                polygon.setOptions({ fillColor: '#fff' });
+                customOverlay.setMap(null);
+            });
+
+            // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다 
+            kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
+                infowindow.setPosition(mouseEvent.latLng);
+                infowindow.setPosition(map);
+
+            });
+        }
+
+        // 마커를 표시할 위치와 title 객체 배열입니다 
+        var positions = [
+            {
+                content: '<div><p class= "noto" style="font-size:small;">서울지방경찰청 기동본부</div>',
+                latlng: new kakao.maps.LatLng(37.56877, 127.0148)
+            },
+            {
+                content: '<div><p class= "noto" style="font-size:small;">신당동떡볶이공원</div>',
+                latlng: new kakao.maps.LatLng(37.56337, 127.0143)
+            }
+        ];
+
+        for (var i = 0; i < positions.length; i++) {
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                position: positions[i].latlng // 마커의 위치
+            });
+
+            // 마커에 표시할 인포윈도우를 생성합니다 
+            var infowindow = new kakao.maps.InfoWindow({
+                content: positions[i].content // 인포윈도우에 표시할 내용
+            });
+
+            // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+            // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+            // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+            kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+
+        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+        function makeOverListener(map, marker, infowindow) {
+            return function () {
+                infowindow.open(map, marker);
+            };
+        }
+
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+        function makeOutListener(infowindow) {
+            return function () {
+                infowindow.close();
+            };
+        }
+        var drawingFlag = false; // 선이 그려지고 있는 상태를 가지고 있을 변수입니다
+        var moveLine; // 선이 그려지고 있을때 마우스 움직임에 따라 그려질 선 객체 입니다
+        var clickLine // 마우스로 클릭한 좌표로 그려질 선 객체입니다
+        var distanceOverlay; // 선의 거리정보를 표시할 커스텀오버레이 입니다
+        var dots = {}; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
+
+        // 지도에 클릭 이벤트를 등록합니다
+        // 지도를 클릭하면 선 그리기가 시작됩니다 그려진 선이 있으면 지우고 다시 그립니다
+        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+
+            // 마우스로 클릭한 위치입니다 
+            var clickPosition = mouseEvent.latLng;
+
+            // 지도 클릭이벤트가 발생했는데 선을 그리고있는 상태가 아니면
+            if (!drawingFlag) {
+
+                // 상태를 true로, 선이 그리고있는 상태로 변경합니다
+                drawingFlag = true;
+
+                // 지도 위에 선이 표시되고 있다면 지도에서 제거합니다
+                deleteClickLine();
+
+                // 지도 위에 커스텀오버레이가 표시되고 있다면 지도에서 제거합니다
+                deleteDistnce();
+
+                // 지도 위에 선을 그리기 위해 클릭한 지점과 해당 지점의 거리정보가 표시되고 있다면 지도에서 제거합니다
+                deleteCircleDot();
+
+                // 클릭한 위치를 기준으로 선을 생성하고 지도위에 표시합니다
+                clickLine = new kakao.maps.Polyline({
+                    map: map, // 선을 표시할 지도입니다 
+                    path: [clickPosition], // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+                    strokeWeight: 3, // 선의 두께입니다 
+                    strokeColor: '#db4040', // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid' // 선의 스타일입니다
+                });
+
+                // 선이 그려지고 있을 때 마우스 움직임에 따라 선이 그려질 위치를 표시할 선을 생성합니다
+                moveLine = new kakao.maps.Polyline({
+                    strokeWeight: 3, // 선의 두께입니다 
+                    strokeColor: '#db4040', // 선의 색깔입니다
+                    strokeOpacity: 0.5, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid' // 선의 스타일입니다    
+                });
+
+                // 클릭한 지점에 대한 정보를 지도에 표시합니다
+                displayCircleDot(clickPosition, 0);
+
+
+            } else { // 선이 그려지고 있는 상태이면
+
+                // 그려지고 있는 선의 좌표 배열을 얻어옵니다
+                var path = clickLine.getPath();
+
+                // 좌표 배열에 클릭한 위치를 추가합니다
+                path.push(clickPosition);
+
+                // 다시 선에 좌표 배열을 설정하여 클릭 위치까지 선을 그리도록 설정합니다
+                clickLine.setPath(path);
+
+                var distance = Math.round(clickLine.getLength());
+                displayCircleDot(clickPosition, distance);
+            }
+
+        });
+
+        // 지도에 마우스무브 이벤트를 등록합니다
+        // 선을 그리고있는 상태에서 마우스무브 이벤트가 발생하면 그려질 선의 위치를 동적으로 보여주도록 합니다
+        kakao.maps.event.addListener(map, 'mousemove', function (mouseEvent) {
+
+            // 지도 마우스무브 이벤트가 발생했는데 선을 그리고있는 상태이면
+            if (drawingFlag) {
+
+                // 마우스 커서의 현재 위치를 얻어옵니다 
+                var mousePosition = mouseEvent.latLng;
+
+                // 마우스 클릭으로 그려진 선의 좌표 배열을 얻어옵니다
+                var path = clickLine.getPath();
+
+                // 마우스 클릭으로 그려진 마지막 좌표와 마우스 커서 위치의 좌표로 선을 표시합니다
+                var movepath = [path[path.length - 1], mousePosition];
+                moveLine.setPath(movepath);
+                moveLine.setMap(map);
+
+                var distance = Math.round(clickLine.getLength() + moveLine.getLength()), // 선의 총 거리를 계산합니다
+                    content = '<div class="dotOverlay distanceInfo">총거리 <span class="number">' + distance + '</span>m</div>'; // 커스텀오버레이에 추가될 내용입니다
+
+                // 거리정보를 지도에 표시합니다
+                showDistance(content, mousePosition);
+            }
+        });
+
+        // 지도에 마우스 오른쪽 클릭 이벤트를 등록합니다
+        // 선을 그리고있는 상태에서 마우스 오른쪽 클릭 이벤트가 발생하면 선 그리기를 종료합니다
+        kakao.maps.event.addListener(map, 'rightclick', function (mouseEvent) {
+
+            // 지도 오른쪽 클릭 이벤트가 발생했는데 선을 그리고있는 상태이면
+            if (drawingFlag) {
+
+                // 마우스무브로 그려진 선은 지도에서 제거합니다
+                moveLine.setMap(null);
+                moveLine = null;
+
+                // 마우스 클릭으로 그린 선의 좌표 배열을 얻어옵니다
+                var path = clickLine.getPath();
+
+                // 선을 구성하는 좌표의 개수가 2개 이상이면
+                if (path.length > 1) {
+
+                    // 마지막 클릭 지점에 대한 거리 정보 커스텀 오버레이를 지웁니다
+                    if (dots[dots.length - 1].distance) {
+                        dots[dots.length - 1].distance.setMap(null);
+                        dots[dots.length - 1].distance = null;
+
+                    }
+
+                    var distance = Math.round(clickLine.getLength()), // 선의 총 거리를 계산합니다
+                        content = getTimeHTML(distance); // 커스텀오버레이에 추가될 내용입니다
+
+                    // 그려진 선의 거리정보를 지도에 표시합니다
+                    showDistance(content, path[path.length - 1]);
+
+                } else {
+
+                    // 선을 구성하는 좌표의 개수가 1개 이하이면 
+                    // 지도에 표시되고 있는 선과 정보들을 지도에서 제거합니다.
+                    deleteClickLine();
+                    deleteCircleDot();
+                    deleteDistnce();
+
+                }
+
+                // 상태를 false로, 그리지 않고 있는 상태로 변경합니다
+                drawingFlag = false;
+            }
+        });
+
+        // 클릭으로 그려진 선을 지도에서 제거하는 함수입니다
+        function deleteClickLine() {
+            if (clickLine) {
+                clickLine.setMap(null);
+                clickLine = null;
+            }
+        }
+
+        // 마우스 드래그로 그려지고 있는 선의 총거리 정보를 표시하거
+        // 마우스 오른쪽 클릭으로 선 그리가 종료됐을 때 선의 정보를 표시하는 커스텀 오버레이를 생성하고 지도에 표시하는 함수입니다
+        function showDistance(content, position) {
+
+            if (distanceOverlay) { // 커스텀오버레이가 생성된 상태이면
+
+                // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
+                distanceOverlay.setPosition(position);
+                distanceOverlay.setContent(content);
+
+            } else { // 커스텀 오버레이가 생성되지 않은 상태이면
+
+                // 커스텀 오버레이를 생성하고 지도에 표시합니다
+                distanceOverlay = new kakao.maps.CustomOverlay({
+                    map: map, // 커스텀오버레이를 표시할 지도입니다
+                    content: content,  // 커스텀오버레이에 표시할 내용입니다
+                    position: position, // 커스텀오버레이를 표시할 위치입니다.
+                    xAnchor: 0,
+                    yAnchor: 0,
+                    zIndex: 3
+                });
+            }
+        }
+
+
+        // 그려지고 있는 선의 총거리 정보와 
+        // 선 그리가 종료됐을 때 선의 정보를 표시하는 커스텀 오버레이를 삭제하는 함수입니다
+        function deleteDistnce() {
+            if (distanceOverlay) {
+                distanceOverlay.setMap(null);
+                distanceOverlay = null;
+            }
+        }
+
+        // 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여 
+        // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 표출하는 함수입니다
+        function displayCircleDot(position, distance) {
+
+            // 클릭 지점을 표시할 빨간 동그라미 커스텀오버레이를 생성합니다
+            var circleOverlay = new kakao.maps.CustomOverlay({
+                content: '<span class="dot"></span>',
+                position: position,
+                zIndex: 1
+            });
+
+            // 지도에 표시합니다
+            circleOverlay.setMap(map);
+
+            if (distance > 0) {
+                // 클릭한 지점까지의 그려진 선의 총 거리를 표시할 커스텀 오버레이를 생성합니다
+                var distanceOverlay = new kakao.maps.CustomOverlay({
+                    content: '<div class="dotOverlay">거리 <span class="number">' + distance + '</span>m</div>',
+                    position: position,
+                    yAnchor: 1,
+                    zIndex: 2
+                });
+
+                // 지도에 표시합니다
+                distanceOverlay.setMap(map);
+            }
+
+            // 배열에 추가합니다
+            dots.push({ circle: circleOverlay, distance: distanceOverlay });
+        }
+
+        // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 지도에서 모두 제거하는 함수입니다
+        function deleteCircleDot() {
+            var i;
+
+            for (i = 0; i < dots.length; i++) {
+                if (dots[i].circle) {
+                    dots[i].circle.setMap(null);
+                }
+
+                if (dots[i].distance) {
+                    dots[i].distance.setMap(null);
+                }
+            }
+
+            dots = [];
+        }
+
+        // 마우스 우클릭 하여 선 그리기가 종료됐을 때 호출하여 
+        // 그려진 선의 총거리 정보와 거리에 대한 도보, 자전거 시간을 계산하여
+        // HTML Content를 만들어 리턴하는 함수입니다
+        function getTimeHTML(distance) {
+
+            // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
+            var walkkTime = distance / 67 | 0;
+            var walkHour = '', walkMin = '';
+
+            // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
+            if (walkkTime > 60) {
+                walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
+            }
+            walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
+
+            // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
+            var bycicleTime = distance / 227 | 0;
+            var bycicleHour = '', bycicleMin = '';
+
+            // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
+            if (bycicleTime > 60) {
+                bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + '</span>시간 '
+            }
+            bycicleMin = '<span class="number">' + bycicleTime % 60 + '</span>분'
+
+            // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
+            var content = '<ul class="dotOverlay distanceInfo">';
+            content += '    <li>';
+            content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
+            content += '    </li>';
+            content += '    <li>';
+            content += '        <span class="label">도보</span>' + walkHour + walkMin;
+            content += '    </li>';
+            content += '    <li>';
+            content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+            content += '    </li>';
+            content += '</ul>'
+
+            return content;
+        }
+
+
+        var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
+        var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+        var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+        var position = new kakao.maps.LatLng(37.568, 127.0148);
+
+        // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+        roadviewClient.getNearestPanoId(position, 50, function (panoId) {
+            roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+        });
+
+
+    </script>
+</body>
+
+</html>

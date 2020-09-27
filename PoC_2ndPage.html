@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800&amp;subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        header {
+            margin: 0 auto;
+            position: relative;
+            /* width: 100%;
+            height: 50px; */
+            display: flex;
+            /* margin-left:5%; */
+            background-color: rgb(255, 255, 255);
+            box-shadow: rgb(231, 231, 231) 2px 2px 5px;
+            margin-bottom: -14px;
+        }
+
+        body {
+            background-color: #f1f2f2;
+        }
+
+        nav {
+            margin: 0 auto;
+            position: relative;
+            background-color: rgb(255, 255, 255);
+            box-shadow: rgb(231, 231, 231) 2px 2px 5px;
+            /* margin-bottom: 16px; */
+            /* display: inline-flex; */
+        }
+
+        #topMenu {
+            height: 30px;
+            width: relative;
+        }
+
+        #topMenu ul li {
+            list-style: none;
+            color: white;
+            background-color: white;
+            float: left;
+            line-height: 30px;
+            vertical-align: middle;
+            text-align: center;
+            margin-right: 70px;
+        }
+
+        #topMenu .menuLink {
+            text-decoration: none;
+            color: #2d2d2d;
+            display: block;
+            width: 200px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #topMenu .menuLink:hover {
+            color: white;
+            background-color: #4d4d4d;
+        }
+        table {
+            margin-top: -20px;
+            margin-left: 0px;
+            border-spacing: 25px;
+        }
+        #inner_table{
+            background-color: #e8e8e8;
+            margin-top: 20px; 
+            border-spacing: 10px;
+        }
+        #td_product{
+            text-align: center;
+        }
+        a { text-decoration:none }
+
+
+    </style>
+
+    <script language="javascript">
+        function add_count1(){
+        cnt=Number(frm1.cnt.value);
+        frm1.cnt.value=cnt+1;
+        }
+        
+        function del_count1(){
+        cnt=Number(frm1.cnt.value);
+        if(cnt != 1) frm1.cnt.value=cnt-1;
+        }
+
+        function add_count2(){
+        cnt=Number(frm2.cnt.value);
+        frm2.cnt.value=cnt+1;
+        }
+        
+        function del_count2(){
+        cnt=Number(frm2.cnt.value);
+        if(cnt != 1) frm2.cnt.value=cnt-1;
+        }
+
+        function add_count3(){
+        cnt=Number(frm3.cnt.value);
+        frm3.cnt.value=cnt+1;
+        }
+        
+        function del_count3(){
+        cnt=Number(frm3.cnt.value);
+        if(cnt != 1) frm3.cnt.value=cnt-1;
+        }
+
+        function add_count4(){
+        cnt=Number(frm4.cnt.value);
+        frm4.cnt.value=cnt+1;
+        }
+        
+        function del_count4(){
+        cnt=Number(frm4.cnt.value);
+        if(cnt != 1) frm4.cnt.value=cnt-1;
+        }
+
+        function add_count5(){
+        cnt=Number(frm5.cnt.value);
+        frm5.cnt.value=cnt+1;
+        }
+        
+        function del_count5(){
+        cnt=Number(frm5.cnt.value);
+        if(cnt != 1) frm5.cnt.value=cnt-1;
+        }
+        
+
+        window.onload = function () {
+            
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            
+            axisX:{
+                interval: 1
+            },
+            axisY2:{
+                interlacedColor: "#f1f2f2",
+                gridColor: "rgba(1,77,101,.1)",
+                title: "평점"
+            },
+            data: [
+            {
+                type: "bar",
+                showInLegend: true, 
+                axisYType: "secondary",
+                name: "친구네마트",
+                color: "rgb(19,52,123)",
+                dataPoints: [
+                    { y: 80, label: "배달신속성" },
+                    { y: 90, label: "정확성" },
+                    { y: 90, label: "신선도" },
+                    { y: 95, label: "친절도" },
+                    { y: 85, label: "합리적인 가격" },
+                ]
+            },
+            {        
+                type: "bar",
+                showInLegend: true, 
+                axisYType: "secondary",
+                name: "신당동 평균",
+                color: "rgb(191,212,243)",
+                dataPoints: [
+                {y: 71 , label:"배달신속성" },
+                {y: 80, label: "정확성"},
+                {y: 60 , label: "신선도"},
+                {y: 65, label: "친절도"  },
+                {y: 80, label: "합리적인 가격" },
+                ]
+            }
+            ]
+        });
+        chart.render();
+
+        }
+    </script>
+    
+    
+</head>
+
+<body>
+    <header>
+        <h1 style="overflow: hidden;float: left; margin-left:40px; color:rgb(15,17,96);"> 우리동네 픽업스토어</h1>
+    </header>
+    <nav id="topMenu">
+        <ul>
+            <li><a class="menuLink" href="#">우리동네 픽업스토어란?</a></li>
+            <li><a class="menuLink" href="PoC.html">지역별 픽업스토어</a></li>
+            <li><a class="menuLink" href="#">[소상공인] 픽업스토어 신청하기</a></li>
+            <li><a class="menuLink" href="PoC_2ndPage.html">[소비자] 픽업 신청하기</a></li>
+        </ul>
+    </nav>
+
+
+    <fieldset style="line-height: 1px; border:none; margin-top: 30px;">
+        <legend style="font-size:large; font-weight: 600;">[소비자] 픽업 신청하기</legend><br>
+        <table>
+            <tr>
+                <td>
+                    <table id="inner_table" style="width: 220px; height:500px;">
+                        <tr>
+                            <th style="font-size:large; font-weight:bold; padding:5px;">신당동 친구네마트</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img style="width: 190px; height: 100px; display: block; margin: 0px auto;"
+                                    src="신당동친구네마트.jpg">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3 style="font-size:medium; font-weight: bold;">스토어 분류</h3>
+                                <h4 style="font-size:small; font-weight: 400;">슈퍼마켓</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3 style="font-size:medium; font-weight: bold; ">스토어 위치</h3>
+                                <h4 style="font-size:small; font-weight: 400;">서울특별시 중구 장충단로8길 59</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3 style="font-size:medium; font-weight: bold; ">스토어 픽업 신청 가능 시간</h3>
+                                <h4 style="font-size:small; font-weight: 400;"> 오전 10시~오후 5시</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3 style="font-size:medium; font-weight: bold; ">전화번호</h3>
+                                <h4 style="font-size:small; font-weight: 400;">(02)123-4567</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3 style="font-size:medium; font-weight: bold; ">스토어 별점 평균</h3>
+                                <h4 style="font-size:small; font-weight: 400;"> 4.2점 ★★★★☆</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><button type="button">신당동 친구네마트 픽업 신청하기</button></td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table id="inner_table" style="width: 900px; height:500px;">
+                        <tr>
+                            <th colspan=5 style="font-size:large; font-weight:bold; text-align: center;">Best Products</th>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><h3 style="font-size:medium; font-weight: bold; text-align: center;">2020년 5월 기준, 신당동 친구네마트에서 가장 많이 팔린 물품들입니다.</h3></td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td id="td_product">
+                                <img style="width: 150px; height:150px;" src="계란.jpg" alt="품목이미지 없음">
+                                <h4>6,990원</h4>
+                                <h6 style="font-weight: 400;">1개당 233원</h6>
+                                <h5 style="font-weight: 500;">신선특란30입</h5>
+                                <form name="frm1" style="margin-top: 10px;font-size: small;">
+                                    수량: <input type="text" name="cnt" readonly value="1" style="border 0; width:13px;" maxlength="3">
+                                    <a href="javascript:add_count1();" style="color: rgb(15,17,96);">▲</a>
+                                    <a href="javascript:del_count1();" style="color: rgb(15,17,96);">▼</a><br>
+                                </form>
+                                <button type="button" style="margin-top: 20px;">장바구니에 담기</button>
+                            </td>
+                            <td id="td_product">
+                                <img style="width: 150px; height:150px;" src="삼다수.jpg" alt="품목이미지 없음">
+                                <h4>4,900원</h4>
+                                <h6 style="font-weight: 400;">100ML당 40.8원</h6>
+                                <h5 style="font-weight: 500;">CP_6_삼다수_2L(6입)</h5>
+                                <form name="frm2" style="margin-top: 10px;font-size: small;">
+                                    수량: <input type="text" name="cnt" readonly value="1" style="border 0; width:13px;" maxlength="3">
+                                    <a href="javascript:add_count2();" style="color: rgb(15,17,96);">▲</a>
+                                    <a href="javascript:del_count2();" style="color: rgb(15,17,96);">▼</a><br>
+                                </form>
+                                <button type="button" style="margin-top: 20px;">장바구니에 담기</button>
+                            </td>
+                            <td id="td_product">
+                                <img style="width: 150px; height:150px;" src="찜갈비.jpg" alt="품목이미지 없음">
+                                <h4>1,790원</h4>
+                                <h6 style="font-weight: 400;">100G당 1,790원</h6>
+                                <h5 style="font-weight: 500;">찜갈비(미국산쇠고기)_100 g</h5>
+                                <form name="frm3" style="margin-top: 10px;font-size: small;">
+                                    수량: <input type="text" name="cnt" readonly value="1" style="border 0; width:13px;" maxlength="3">
+                                    <a href="javascript:add_count3();" style="color: rgb(15,17,96);">▲</a>
+                                    <a href="javascript:del_count3();" style="color: rgb(15,17,96);">▼</a><br>
+                                </form>
+                                <button type="button" style="margin-top: 20px;">장바구니에 담기</button>
+                            </td>
+                            <td id="td_product">
+                                <img style="width: 150px; height:150px;" src="서울우유.jpg" alt="품목이미지 없음">
+                                <h4>4,980원</h4>
+                                <h6 style="font-weight: 400;">100ML당 216.5원</h6>
+                                <h5 style="font-weight: 500;">서울_우유_2.3L</h5>
+                                <form name="frm4" style="margin-top: 10px;font-size: small;">
+                                    수량: <input type="text" name="cnt" readonly value="1" style="border 0; width:13px;" maxlength="3">
+                                    <a href="javascript:add_count4();" style="color: rgb(15,17,96);">▲</a>
+                                    <a href="javascript:del_count4();" style="color: rgb(15,17,96);">▼</a><br>
+                                </form>
+                                <button type="button" style="margin-top: 20px;">장바구니에 담기</button>
+                            </td>
+                            <td id="td_product">
+                                <img style="width: 150px; height:150px;" src="돼지앞다리.jpg" alt="품목이미지 없음">
+                                <h4>890원</h4>
+                                <h6 style="font-weight: 400;">100G당 890원</h6>
+                                <h5 style="font-weight: 500;">돼지앞다리_100 g</h5>
+                                <form name="frm5" style="margin-top: 10px;font-size: small;">
+                                    수량: <input type="text" name="cnt" readonly value="1" style="border 0; width:13px;" maxlength="3">
+                                    <a href="javascript:add_count5();" style="color: rgb(15,17,96);">▲</a>
+                                    <a href="javascript:del_count5();" style="color: rgb(15,17,96);">▼</a><br>
+                                </form>
+                                <button type="button" style="margin-top: 20px;">장바구니에 담기</button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table id="inner_table" style="width: 250px; height:500px; font-size:small; background-color: white;">
+                        <tr>
+                            <th style="font-size:large; font-weight:bold;">친구네마트 vs. 신당동평균 리뷰</th>
+                        </tr> 
+                        <tr>
+                            <td>
+                                <div id="chartContainer" style="height: 400px; width: 250px;"></div>
+                                <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</body>
+
+</html>
